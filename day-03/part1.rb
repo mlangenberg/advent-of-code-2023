@@ -1,10 +1,10 @@
-schematic = ARGF.readlines.map { _1.chomp.chars }
+schematic = ARGF.readlines.map { _1.chomp }
 
 Number = Data.define(:row, :start, :end, :value)
 numbers = []
 
 schematic.each_with_index do |row, row_number|
-  row.join.scan(/\d+/) do |number|
+  row.scan(/\d+/) do |number|
     numbers << Number.new(row_number, $~.begin(0), $~.end(0) - 1, number.to_i)
   end
 end

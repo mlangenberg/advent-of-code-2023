@@ -1,4 +1,4 @@
-schematic = ARGF.readlines.map { _1.chomp.chars }
+schematic = ARGF.readlines.map { _1.chomp }
 
 class Range
   def overlaps?(other)
@@ -12,14 +12,13 @@ numbers = []
 gears = []
 
 schematic.each_with_index do |row, row_number|
-  row.join.scan(/\d+/) do |number|
+  row.scan(/\d+/) do |number|
     numbers << Number.new(row_number, $~.begin(0), $~.end(0) - 1, number.to_i)
   end
-  row.each_with_index do |symbol, column_number|
-    gears << Gear.new(row_number, column_number) if symbol == '*'
+  row.scan('*') do
+    gears << Gear.new(row_number, $~.begin(0))
   end
 end
-
 
 gear_to_numbers = Hash.new { |h,k| h[k] = [] }
 
@@ -33,7 +32,6 @@ gears.each do |gear|
     
   numbers.each do |number|
     if (min_row..max_row).include?(number.row) && (number.start..number.end).overlaps?(min_col..max_col)
-      puts [number.start, number.end, min_col, max_col].inspect
       gear_to_numbers[gear] << number
     end
   end
