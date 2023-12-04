@@ -1,4 +1,4 @@
-schematic = ARGF.readlines.map { _1.chomp }
+schematic = ARGF.readlines.map(&:chomp)
 
 class Range
   def overlaps?(other)
@@ -20,7 +20,7 @@ schematic.each_with_index do |row, row_number|
   end
 end
 
-gear_to_numbers = Hash.new { |h,k| h[k] = [] }
+gear_to_numbers = Hash.new { |h, k| h[k] = [] }
 
 gears.each do |gear|
   puts "Checking gear #{gear.inspect}"
@@ -29,14 +29,15 @@ gears.each do |gear|
   max_row = gear.row + 1 == schematic.size ? gear.row : gear.row + 1
   min_col = gear.col.zero? ? 0 : gear.col - 1
   max_col = gear.col + 1 == schematic.first.size ? gear.col : gear.col + 1
-    
+
   numbers.each do |number|
-    if (min_row..max_row).include?(number.row) && (number.start..number.end).overlaps?(min_col..max_col)
+    if (min_row..max_row).include?(number.row) &&
+       (number.start..number.end).overlaps?(min_col..max_col)
       gear_to_numbers[gear] << number
     end
   end
-
-  true
 end
 
-puts gear_to_numbers.keep_if { |_, numbers| numbers.size == 2 }.values.map { _1.map(&:value).reduce(:*) }.sum
+puts gear_to_numbers
+  .keep_if { |_, numbers| numbers.size == 2 }
+  .values.map { _1.map(&:value).reduce(:*) }.sum

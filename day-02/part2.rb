@@ -8,14 +8,14 @@ Game = Struct.new(:id, :subsets) do
   end
 end
 Subset = Struct.new(:red, :green, :blue) do
-  def power = red*green*blue
+  def power = red * green * blue
 end
 
 def parse(line)
-  line =~ /Game (\d+): (.+)/ 
+  line =~ /Game (\d+): (.+)/
   Game.new(
-    id: $1.to_i,
-    subsets: $2.split('; ').map { parse_subset(_1) }
+    id: Regexp.last_match(1).to_i,
+    subsets: Regexp.last_match(2).split('; ').map { parse_subset(_1) }
   )
 end
 
@@ -23,7 +23,7 @@ def parse_subset(input)
   Subset.new(0, 0, 0).tap do |subset|
     input.split(', ').each do |cubes|
       cubes =~ /(\d+) (\w+)/
-      subset.send("#{$2}=", $1.to_i)
+      subset.send("#{Regexp.last_match(2)}=", Regexp.last_match(1).to_i)
     end
   end
 end
