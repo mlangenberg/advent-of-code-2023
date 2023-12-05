@@ -9,7 +9,7 @@ cards = ARGF.to_a
 card_copies = Array.new(cards.size, 0)
 
 cards.each_with_index do |(winning, mine), index|
-  (winning & mine).each_index do |i|
+  (winning & mine).size.times do |i|
     card_copies[index + i + 1] += card_copies[index] + 1
   end
 end
