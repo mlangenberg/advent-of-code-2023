@@ -13,6 +13,9 @@ Style/SpecialGlobalVars:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Style/MultilineBlockChain:
+  Enabled: false
+
 Metrics/AbcSize:
   Enabled: false
 
