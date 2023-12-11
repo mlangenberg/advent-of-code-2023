@@ -12,4 +12,4 @@ until current == 'ZZZ'
   steps += 1
   current = nodes[current][instructions.next]
 end
-p steps
+puts steps
