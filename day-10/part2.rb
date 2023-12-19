@@ -15,19 +15,18 @@ class Maze
     LEFT => %w[- L F],
     RIGHT => %w[- J 7]
   }.freeze
-  attr_reader :steps
 
   def initialize(tiles)
     @tiles = tiles
     @pos_y = tiles.find_index { _1.include?('S') }
     @pos_x = tiles[@pos_y].index('S')
     @direction, = TILES_FOR_START_MOVE.find { |move, tiles| tiles.include?(next_tile(move)) }
-    @steps = 0
+    @steps = [] << [@pos_x, @pos_y]
   end
 
   def move
-    @steps += 1
     @pos_y, @pos_x = next_position
+    @steps << [@pos_x, @pos_y]
     @direction = NEXT_MOVES[@direction].fetch(current_tile, @direction)
   end
 
@@ -36,9 +35,17 @@ class Maze
   def next_tile(move) = @tiles.dig(*next_position(move))
 
   def next_position(move = @direction) = [[@pos_y, @pos_x], move].transpose.map(&:sum)
+
+  # Shoelace formula
+  def enclosed_tiles_count
+    sum = @steps.each_cons(2).sum do |(x1, y1), (x2, y2)|
+      (x1 * y2) - (x2 * y1)
+    end
+    (sum / 2) - ((@steps.size / 2) - 1)
+  end
 end
 
 maze = Maze.new(ARGF.readlines.map(&:chomp).map(&:chars))
 maze.move
 maze.move until maze.current_tile == 'S'
-puts maze.steps / 2
+puts maze.enclosed_tiles_count
