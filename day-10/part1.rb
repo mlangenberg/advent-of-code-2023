@@ -3,7 +3,6 @@ class Maze
   DOWN = [1, 0].freeze
   LEFT =  [0, -1].freeze
   RIGHT = [0, 1].freeze
-  MOVES = [UP, DOWN, LEFT, RIGHT].freeze
   NEXT_MOVES = {
     UP => { '7' => LEFT, 'F' => RIGHT },
     DOWN => { 'L' => RIGHT, 'J' => LEFT },
@@ -22,7 +21,7 @@ class Maze
     @tiles = tiles
     @pos_y = tiles.find_index { _1.include?('S') }
     @pos_x = tiles[@pos_y].index('S')
-    @direction = MOVES.find { TILES_FOR_START_MOVE.fetch(_1, []).include?(next_tile(_1)) }
+    @direction, = TILES_FOR_START_MOVE.find { |move, tiles| tiles.include?(next_tile(move)) }
     @steps = 0
   end
 
