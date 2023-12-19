@@ -47,4 +47,4 @@ end
 maze = Maze.new(ARGF.readlines.map(&:chomp).map(&:chars))
 maze.move
 maze.move until maze.current_tile == 'S'
-puts maze.steps
+puts maze.steps / 2
